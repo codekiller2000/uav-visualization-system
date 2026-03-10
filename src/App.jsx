@@ -7,6 +7,7 @@ import ScenarioList from './pages/ScenarioList'
 import ScenarioDetail from './pages/ScenarioDetail'
 import ExperimentList from './pages/ExperimentList'
 import ExperimentDetail from './pages/ExperimentDetail'
+import AdminPanel from './pages/AdminPanel'
 import './App.css'
 
 function App() {
@@ -55,6 +56,10 @@ function App() {
         <Route
           path="/experiment/:id"
           element={isAuthenticated ? <ExperimentDetail onLogout={handleLogout} /> : <Navigate to="/login" />}
+        />
+        <Route
+          path="/admin"
+          element={isAuthenticated ? <AdminPanel onLogout={handleLogout} /> : <Navigate to="/login" />}
         />
         <Route path="/" element={<Navigate to="/dashboard" />} />
       </Routes>

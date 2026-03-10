@@ -21,7 +21,7 @@
 }
 
 .experiments-table th {
-  padding: 16px;
+  padding: 14px 16px;
   text-align: left;
   font-weight: 600;
   color: #333;
@@ -29,13 +29,14 @@
 }
 
 .experiments-table td {
-  padding: 16px;
+  padding: 14px 16px;
   border-bottom: 1px solid #f0f0f0;
   color: #555;
+  vertical-align: middle;
 }
 
 .experiments-table tbody tr:hover {
-  background: #fafafa;
+  background: #fafbff;
 }
 
 .status-badge {
@@ -55,6 +56,27 @@
   color: #f57c00;
 }
 
+/* 实验结果列的"查看"按钮 */
+.btn-view-result {
+  padding: 6px 18px;
+  background: #3a7bd5;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 13px;
+  transition: background 0.2s, transform 0.1s;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.btn-view-result:hover {
+  background: #2d62b8;
+  transform: translateY(-1px);
+}
+
+/* 操作列"详情"按钮 */
 .btn-view {
   padding: 6px 16px;
   background: #667eea;
@@ -62,7 +84,7 @@
   border: none;
   border-radius: 6px;
   cursor: pointer;
-  font-size: 14px;
+  font-size: 13px;
   transition: background 0.3s;
 }
 
@@ -72,8 +94,179 @@
 
 .text-muted {
   color: #999;
+  font-size: 13px;
+}
+
+/* 分页 */
+.pagination {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 20px;
+  font-size: 14px;
+  color: #555;
+}
+
+.pagination-info {
+  color: #666;
+}
+
+.pagination-size {
+  color: #888;
+  margin-left: 8px;
+}
+
+.pagination-btn {
+  padding: 4px 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  background: white;
+  cursor: pointer;
   font-size: 14px;
 }
+
+.pagination-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.pagination-btn:not(:disabled):hover {
+  background: #f0f0f0;
+}
+
+.pagination-current {
+  padding: 4px 12px;
+  border: 1px solid #667eea;
+  border-radius: 4px;
+  color: #667eea;
+  font-weight: 600;
+}
+
+.pagination-goto {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-left: 8px;
+}
+
+.pagination-goto input {
+  width: 48px;
+  padding: 4px 6px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  text-align: center;
+  font-size: 13px;
+}
+
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 20px;
+}
+
+.modal-box {
+  background: white;
+  border-radius: 12px;
+  width: 100%;
+  max-width: 860px;
+  max-height: 88vh;
+  overflow-y: auto;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.18);
+  animation: modal-in 0.2s ease;
+}
+
+@keyframes modal-in {
+  from { transform: scale(0.93); opacity: 0; }
+  to   { transform: scale(1);    opacity: 1; }
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 24px 16px;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.modal-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: #333;
+}
+
+.modal-close {
+  background: none;
+  border: none;
+  font-size: 18px;
+  color: #999;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 4px;
+  transition: color 0.2s, background 0.2s;
+}
+
+.modal-close:hover {
+  color: #333;
+  background: #f0f0f0;
+}
+
+.modal-body {
+  padding: 24px;
+}
+
+.modal-field {
+  margin-bottom: 14px;
+  font-size: 15px;
+  color: #333;
+  line-height: 1.7;
+}
+
+.modal-label {
+  font-weight: 600;
+  color: #555;
+  margin-right: 4px;
+}
+
+.modal-images {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-top: 20px;
+}
+
+.modal-img {
+  width: calc(50% - 8px);
+  min-width: 300px;
+  border-radius: 8px;
+  border: 1px solid #e8e8e8;
+  background: #f8f9fa;
+  /* 图片加载时的骨架占位 */
+  min-height: 200px;
+  display: block;
+  transition: box-shadow 0.2s;
+}
+
+.modal-img:hover {
+  box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+}
+
+/* 单张图片时全宽 */
+.modal-images .modal-img:only-child {
+  width: 100%;
+}
+
+.modal-no-image {
+  color: #aaa;
+  text-align: center;
+  padding: 24px 0;
+  font-size: 14px;
+}
+
 
 .empty-state {
   text-align: center;

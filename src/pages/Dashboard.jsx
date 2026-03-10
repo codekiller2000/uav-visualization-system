@@ -1,10 +1,11 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import Layout from '../components/Layout'
 import './Dashboard.css'
 
 function Dashboard({ onLogout }) {
   const currentUser = JSON.parse(localStorage.getItem('currentUser') || '{}')
+  const navigate = useNavigate()
 
   return (
     <Layout onLogout={onLogout}>
@@ -28,11 +29,11 @@ function Dashboard({ onLogout }) {
           </Link>
 
           {currentUser.role === 'admin' && (
-            <div className="dashboard-card">
-              <div className="card-icon">👥</div>
-              <h3>用户管理</h3>
-              <p>管理系统用户账号</p>
-            </div>
+            <Link to="/admin" className="dashboard-card admin-card">
+              <div className="card-icon">⚙️</div>
+              <h3>后台管理</h3>
+              <p>资源监控、权限分配、数据管理、用户管理</p>
+            </Link>
           )}
         </div>
 

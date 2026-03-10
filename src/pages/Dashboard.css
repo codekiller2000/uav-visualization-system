@@ -59,6 +59,16 @@
   line-height: 1.6;
 }
 
+.dashboard-card.admin-card {
+  border: 2px solid transparent;
+  background: linear-gradient(white, white) padding-box,
+              linear-gradient(135deg, #667eea, #764ba2) border-box;
+}
+
+.dashboard-card.admin-card h3 {
+  color: #667eea;
+}
+
 .system-intro {
   background: white;
   border-radius: 12px;

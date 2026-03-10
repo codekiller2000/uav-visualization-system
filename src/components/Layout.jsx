@@ -23,6 +23,9 @@ function Layout({ children, onLogout }) {
           <a onClick={() => navigate('/dashboard')}>首页</a>
           <a onClick={() => navigate('/scenarios')}>场景配置</a>
           <a onClick={() => navigate('/experiments')}>实验结果</a>
+          {currentUser.role === 'admin' && (
+            <a onClick={() => navigate('/admin')} className="nav-admin">后台管理</a>
+          )}
         </div>
         <div className="navbar-user">
           <span className="user-name">{currentUser.username}</span>
