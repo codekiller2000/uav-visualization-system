@@ -2,13 +2,12 @@ import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import Layout from '../components/Layout'
 import { experiments } from '../data/mockData'
-import { experimentCharts } from '../data/chartData'
 import './ExperimentList.css'
 
 // 弹窗组件
 function ViewModal({ exp, onClose }) {
   if (!exp) return null
-  const charts = experimentCharts[exp.id] || []
+  const images = exp.resultImages || []
   return (
     <div className="modal-overlay" onClick={onClose}>
       <div className="modal-box" onClick={e => e.stopPropagation()}>
@@ -26,9 +25,9 @@ function ViewModal({ exp, onClose }) {
             {exp.description}
           </p>
 
-          {charts.length > 0 ? (
+          {images.length > 0 ? (
             <div className="modal-images">
-              {charts.map((src, idx) => (
+              {images.map((src, idx) => (
                 <img
                   key={idx}
                   src={src}
