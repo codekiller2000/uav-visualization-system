@@ -107,8 +107,7 @@ export const experiments = [
     userId: 2,
     // 弹窗查看时的图片（用在线占位图模拟学术图表）
     resultImages: [
-      'https://placehold.co/380x260/e8f4fd/1565c0?text=Fig.1+AoI+vs+Sensor+Number',
-      'https://placehold.co/380x260/e8f5e9/2e7d32?text=Fig.2+Energy+Consumption'
+      '/fig2.jpg'
     ]
   },
   {
@@ -121,7 +120,7 @@ export const experiments = [
     createdAt: '2026-03-02 10:00:00',
     userId: 2,
     resultImages: [
-      'https://placehold.co/380x260/fff3e0/e65100?text=Fig.3+Simulation+Params',
+      '/fig4.jpg'
     ]
   },
   {
@@ -134,8 +133,8 @@ export const experiments = [
     createdAt: '2026-03-03 11:00:00',
     userId: 2,
     resultImages: [
-      '/images/fig5_1.jpeg',
-      '/images/fig5_2.jpeg'
+      '/fig5_1.jpeg',
+      '/fig5_2.jpeg'
     ]
   },
   {
@@ -148,8 +147,8 @@ export const experiments = [
     createdAt: '2026-03-03 11:00:00',
     userId: 2,
     resultImages: [
-      '/images/fig5_3.jpeg',
-      '/images/fig5_4.jpeg'
+      '/fig5_3.jpeg',
+      '/fig5_4.jpeg'
     ]
   },
   {
@@ -162,8 +161,8 @@ export const experiments = [
     createdAt: '2026-03-05 14:00:00',
     userId: 2,
     resultImages: [
-      '/images/fig6.jpg',
-      '/images/fig7.jpg'
+      '/fig6.jpg',
+      '/fig7.jpg'
     ]
   },
   {
@@ -176,7 +175,7 @@ export const experiments = [
     createdAt: '2026-03-06 10:00:00',
     userId: 2,
     resultImages: [
-      '/images/fig8.jpg',
+      '/fig8.jpg',
     ]
   },
   {
@@ -189,8 +188,8 @@ export const experiments = [
     createdAt: '2026-03-07 09:00:00',
     userId: 2,
     resultImages: [
-      '/images/fig9.jpg',
-      '/images/fig10.jpg'
+      '/fig9.jpg',
+      '/fig10.jpg'
     ]
   },
   {
@@ -203,7 +202,7 @@ export const experiments = [
     createdAt: '2026-03-08 10:30:00',
     userId: 2,
     resultImages: [
-      '/images/fig11.jpg',
+      '/fig11.jpg',
     ]
   },
   
