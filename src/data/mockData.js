@@ -1,10 +1,10 @@
 // 用户数据
 export const users = [
-  { id: 1, username: 'admin', password: 'admin123', role: 'admin', status: 'active', createdAt: '2024-01-01' },
-  { id: 2, username: 'user1', password: 'user123', role: 'user', status: 'active', createdAt: '2024-02-10' },
-  { id: 3, username: 'researcher1', password: 'res123', role: 'user', status: 'active', createdAt: '2024-02-15' },
-  { id: 4, username: 'researcher2', password: 'res456', role: 'user', status: 'disabled', createdAt: '2024-02-20' },
-  { id: 5, username: 'testuser', password: 'test123', role: 'user', status: 'active', createdAt: '2024-03-01' },
+  { id: 1, username: 'admin', password: 'admin123', role: 'admin', status: 'active', createdAt: '2026-01-01' },
+  { id: 2, username: 'user1', password: 'user123', role: 'user', status: 'active', createdAt: '2026-02-10' },
+  { id: 3, username: 'researcher1', password: 'res123', role: 'user', status: 'active', createdAt: '2026-02-15' },
+  { id: 4, username: 'researcher2', password: 'res456', role: 'user', status: 'disabled', createdAt: '2026-02-20' },
+  { id: 5, username: 'testuser', password: 'test123', role: 'user', status: 'active', createdAt: '2026-03-01' },
 ]
 
 // 用户权限配置
@@ -101,9 +101,9 @@ export const experiments = [
     scenarioId: 1,
     scenarioName: '信息年龄优化',
     configuration: '系统架构设计',
-    description: '单无人车与多无人机辅助数据收集的信息年龄最小化问题',
+    description: '基于深度强化学习的最小化信息年龄优化问题',
     status: 'completed',
-    createdAt: '2024-03-01 09:00:00',
+    createdAt: '2026-03-01 09:00:00',
     userId: 2,
     // 弹窗查看时的图片（用在线占位图模拟学术图表）
     resultImages: [
@@ -116,9 +116,9 @@ export const experiments = [
     scenarioId: 1,
     scenarioName: '信息年龄优化',
     configuration: '仿真参数列表',
-    description: '单无人车与多无人机辅助数据收集的信息年龄最小化问题',
+    description: '基于深度强化学习的最小化信息年龄优化问题',
     status: 'completed',
-    createdAt: '2024-03-02 10:00:00',
+    createdAt: '2026-03-02 10:00:00',
     userId: 2,
     resultImages: [
       'https://placehold.co/380x260/fff3e0/e65100?text=Fig.3+Simulation+Params',
@@ -127,119 +127,95 @@ export const experiments = [
   {
     id: 3,
     scenarioId: 1,
-    scenarioName: '信息年龄优化',
-    configuration: 'UAV=3, MUV=1',
-    description: '不同算法下的平均AoI和最大任务时间与传感器数量的关系',
+    scenarioName: '无人机轨迹对比',
+    configuration: 'SN=30, UAV=3',
+    description: '不同算法下的无人机轨迹和传感器数量的关系',
     status: 'completed',
-    createdAt: '2024-03-03 11:00:00',
+    createdAt: '2026-03-03 11:00:00',
     userId: 2,
     resultImages: [
-      'https://placehold.co/380x260/fce4ec/c62828?text=Fig.4+Avg+AoI+vs+SN',
-      'https://placehold.co/380x260/f3e5f5/6a1b9a?text=Fig.5+Max+Task+Time'
+      '/images/fig5_1.jpeg',
+      '/images/fig5_2.jpeg'
     ]
   },
   {
     id: 4,
     scenarioId: 1,
-    scenarioName: '信息年龄优化',
-    configuration: 'SN=300, MUV=1',
-    description: '不同无人机数量下的平均AoI和最大任务时间',
+    scenarioName: '无人机轨迹对比',
+    configuration: 'SN=60, UAV=3',
+    description: '不同算法下的无人机轨迹和传感器数量的关系',
     status: 'completed',
-    createdAt: '2024-03-04 09:30:00',
+    createdAt: '2026-03-03 11:00:00',
     userId: 2,
     resultImages: [
-      'https://placehold.co/380x260/e8f4fd/0d47a1?text=Fig.6+UAV+Count+vs+AoI',
+      '/images/fig5_3.jpeg',
+      '/images/fig5_4.jpeg'
     ]
   },
   {
     id: 5,
     scenarioId: 1,
     scenarioName: '信息年龄优化',
-    configuration: 'SN=300, MUV=1',
-    description: '不同无人机数量下的无人车行进时长',
+    configuration: 'UAV=3',
+    description: '不同传感器数量下的信息年龄优化',
     status: 'completed',
-    createdAt: '2024-03-05 14:00:00',
+    createdAt: '2026-03-05 14:00:00',
     userId: 2,
     resultImages: [
-      'https://placehold.co/380x260/e8f5e9/1b5e20?text=Fig.7+MUV+Travel+Time',
+      '/images/fig6.jpg',
+      '/images/fig7.jpg'
     ]
   },
   {
     id: 6,
     scenarioId: 1,
     scenarioName: '信息年龄优化',
-    configuration: 'SN=300, UAV=3',
-    description: '无人车存在与否时的平均AoI和最大任务时间',
+    configuration: 'SN=2000',
+    description: '不同无人机数量下的信息年龄优化',
     status: 'completed',
-    createdAt: '2024-03-06 10:00:00',
+    createdAt: '2026-03-06 10:00:00',
     userId: 2,
     resultImages: [
-      'https://placehold.co/380x260/fff8e1/f57f17?text=Fig.8+MUV+Impact',
+      '/images/fig8.jpg',
     ]
   },
   {
     id: 7,
     scenarioId: 1,
     scenarioName: '信息年龄优化',
-    configuration: 'SN=300, UAV=3, MUV=1',
-    description: '不同无人机速度和无人机速度对平均AoI和最大任务时间的影响',
+    configuration: 'Emax = 15000J',
+    description: '不同网络规模对所需无人机数量的影响',
     status: 'completed',
-    createdAt: '2024-03-07 09:00:00',
+    createdAt: '2026-03-07 09:00:00',
     userId: 2,
     resultImages: [
-      'https://placehold.co/380x260/e3f2fd/1565c0?text=Fig.9+Speed+vs+AoI',
-      'https://placehold.co/380x260/f1f8e9/33691e?text=Fig.10+Speed+vs+Task+Time'
+      '/images/fig9.jpg',
+      '/images/fig10.jpg'
     ]
   },
   {
     id: 8,
     scenarioId: 1,
     scenarioName: '信息年龄优化',
-    configuration: 'SN=300, UAV=3, MUV=1',
-    description: '不同无人机最大电池容量和能量阈值对最大任务时间的影响',
+    configuration: 'SN=3000',
+    description: '不同无人机最大电池容量对所需无人机数量的影响',
     status: 'completed',
-    createdAt: '2024-03-08 10:30:00',
+    createdAt: '2026-03-08 10:30:00',
     userId: 2,
     resultImages: [
-      'https://placehold.co/380x260/fce4ec/880e4f?text=Fig.11+Battery+vs+AoI',
-      'https://placehold.co/380x260/ede7f6/4527a0?text=Fig.12+Battery+vs+Task+Time'
+      '/images/fig11.jpg',
     ]
   },
-  {
-    id: 9,
-    scenarioId: 1,
-    scenarioName: '信息年龄优化',
-    configuration: 'SN=300, MUV=1',
-    description: '不同无人机数量下的最大任务时间与数据量的关系',
-    status: 'completed',
-    createdAt: '2024-03-09 11:00:00',
-    userId: 2,
-    resultImages: [
-      'https://placehold.co/380x260/e0f2f1/004d40?text=Fig.13+Data+Volume',
-    ]
-  },
-  {
-    id: 10,
-    scenarioId: 1,
-    scenarioName: '信息年龄优化',
-    configuration: 'SN=300, UAV=3, MUV=1',
-    description: '能量权重参数对平均AoI和最大任务时间的影响',
-    status: 'completed',
-    createdAt: '2024-03-10 09:00:00',
-    userId: 2,
-    resultImages: [
-      'https://placehold.co/380x260/e8eaf6/283593?text=Fig.14+Energy+Weight',
-    ]
-  },
+  
   // 场景二：能量效率优化（多目标）
   {
-    id: 11,
+    id: 9,
     scenarioId: 2,
     scenarioName: '能量效率优化',
     configuration: 'SN=50, UAV=3',
     description: '多目标优化帕累托前沿解集对比实验',
     status: 'completed',
-    createdAt: '2024-03-11 10:00:00',
+    createdAt: '2026-03-11 10:00:00',
     userId: 2,
     resultImages: [
       'https://placehold.co/380x260/e8f4fd/1565c0?text=Pareto+Front+SN%3D50',
@@ -252,7 +228,7 @@ export const experiments = [
     configuration: 'SN=100, UAV=5',
     description: '不同传感器密度下的价值-覆盖权衡分析',
     status: 'completed',
-    createdAt: '2024-03-12 14:00:00',
+    createdAt: '2026-03-12 14:00:00',
     userId: 2,
     resultImages: [
       'https://placehold.co/380x260/fce4ec/c62828?text=Value-Coverage+Tradeoff',
@@ -266,7 +242,7 @@ export const experiments = [
     configuration: 'SN=25, UAV=2, T=3600s',
     description: '动态环境下资源利用效率对比基准算法',
     status: 'completed',
-    createdAt: '2024-03-13 09:30:00',
+    createdAt: '2026-03-13 09:30:00',
     userId: 2,
     resultImages: [
       'https://placehold.co/380x260/e8f5e9/1b5e20?text=Resource+Efficiency',
@@ -280,7 +256,7 @@ export const experiments = [
     configuration: 'SN=50, UAV=4, T=7200s',
     description: '时间窗口长度对系统资源利用效率的影响',
     status: 'running',
-    createdAt: '2024-03-14 10:00:00',
+    createdAt: '2026-03-14 10:00:00',
     userId: 2,
     resultImages: []
   },
@@ -485,24 +461,24 @@ export const paretoSolutions = {
 
 // 系统资源监控数据
 export const resourceMonitorData = [
-  { id: 1, metric: '实验任务运行数', value: 3, unit: '个', status: 'normal', updatedAt: '2024-03-14 10:05:00' },
-  { id: 2, metric: '实验任务队列数', value: 1, unit: '个', status: 'normal', updatedAt: '2024-03-14 10:05:00' },
-  { id: 3, metric: '数据库存储占用', value: 284.6, unit: 'MB', status: 'normal', updatedAt: '2024-03-14 10:05:00' },
-  { id: 4, metric: '帕累托解集记录数', value: 48, unit: '条', status: 'normal', updatedAt: '2024-03-14 10:05:00' },
-  { id: 5, metric: '实验配置记录数', value: 14, unit: '条', status: 'normal', updatedAt: '2024-03-14 10:05:00' },
-  { id: 6, metric: '今日用户访问次数', value: 37, unit: '次', status: 'normal', updatedAt: '2024-03-14 10:05:00' },
-  { id: 7, metric: '近7日新增实验数', value: 14, unit: '个', status: 'normal', updatedAt: '2024-03-14 10:05:00' },
-  { id: 8, metric: '系统已运行时长', value: 72, unit: '小时', status: 'normal', updatedAt: '2024-03-14 10:05:00' },
-  { id: 9, metric: '后端 API 平均响应时延', value: 42, unit: 'ms', status: 'normal', updatedAt: '2024-03-14 10:05:00' },
-  { id: 10, metric: '数据库连接池使用率', value: 18, unit: '%', status: 'normal', updatedAt: '2024-03-14 10:05:00' },
+  { id: 1, metric: '实验任务运行数', value: 3, unit: '个', status: 'normal', updatedAt: '2026-03-14 10:05:00' },
+  { id: 2, metric: '实验任务队列数', value: 1, unit: '个', status: 'normal', updatedAt: '2026-03-14 10:05:00' },
+  { id: 3, metric: '数据库存储占用', value: 284.6, unit: 'MB', status: 'normal', updatedAt: '2026-03-14 10:05:00' },
+  { id: 4, metric: '帕累托解集记录数', value: 48, unit: '条', status: 'normal', updatedAt: '2026-03-14 10:05:00' },
+  { id: 5, metric: '实验配置记录数', value: 14, unit: '条', status: 'normal', updatedAt: '2026-03-14 10:05:00' },
+  { id: 6, metric: '今日用户访问次数', value: 37, unit: '次', status: 'normal', updatedAt: '2026-03-14 10:05:00' },
+  { id: 7, metric: '近7日新增实验数', value: 14, unit: '个', status: 'normal', updatedAt: '2026-03-14 10:05:00' },
+  { id: 8, metric: '系统已运行时长', value: 72, unit: '小时', status: 'normal', updatedAt: '2026-03-14 10:05:00' },
+  { id: 9, metric: '后端 API 平均响应时延', value: 42, unit: 'ms', status: 'normal', updatedAt: '2026-03-14 10:05:00' },
+  { id: 10, metric: '数据库连接池使用率', value: 18, unit: '%', status: 'normal', updatedAt: '2026-03-14 10:05:00' },
 ]
 
 // 数据库资源管理（实验配置表）
 export const dbExperimentConfigs = [
-  { id: 1, scenarioId: 1, scenarioName: '信息年龄优化', sensorNum: 20, uavNum: 1, energyConstraint: 10000, algorithm: 'DQN算法', createdAt: '2024-03-01' },
-  { id: 2, scenarioId: 1, scenarioName: '信息年龄优化', sensorNum: 300, uavNum: 3, energyConstraint: 15000, algorithm: 'DQN算法', createdAt: '2024-03-02' },
-  { id: 3, scenarioId: 1, scenarioName: '信息年龄优化', sensorNum: 300, uavNum: 3, energyConstraint: 14000, algorithm: '随机策略', createdAt: '2024-03-03' },
-  { id: 4, scenarioId: 2, scenarioName: '能量效率优化', sensorNum: 50, uavNum: 3, energyConstraint: 12000, algorithm: 'NSGA-II', createdAt: '2024-03-11' },
-  { id: 5, scenarioId: 2, scenarioName: '能量效率优化', sensorNum: 100, uavNum: 5, energyConstraint: 25000, algorithm: 'NSGA-II', createdAt: '2024-03-12' },
-  { id: 6, scenarioId: 3, scenarioName: '资源利用优化', sensorNum: 25, uavNum: 2, energyConstraint: 12000, algorithm: '动态规划算法', createdAt: '2024-03-13' },
+  { id: 1, scenarioId: 1, scenarioName: '信息年龄优化', sensorNum: 20, uavNum: 1, energyConstraint: 10000, algorithm: 'DQN算法', createdAt: '2026-03-01' },
+  { id: 2, scenarioId: 1, scenarioName: '信息年龄优化', sensorNum: 300, uavNum: 3, energyConstraint: 15000, algorithm: 'DQN算法', createdAt: '2026-03-02' },
+  { id: 3, scenarioId: 1, scenarioName: '信息年龄优化', sensorNum: 300, uavNum: 3, energyConstraint: 14000, algorithm: '随机策略', createdAt: '2026-03-03' },
+  { id: 4, scenarioId: 2, scenarioName: '能量效率优化', sensorNum: 50, uavNum: 3, energyConstraint: 12000, algorithm: 'NSGA-II', createdAt: '2026-03-11' },
+  { id: 5, scenarioId: 2, scenarioName: '能量效率优化', sensorNum: 100, uavNum: 5, energyConstraint: 25000, algorithm: 'NSGA-II', createdAt: '2026-03-12' },
+  { id: 6, scenarioId: 3, scenarioName: '资源利用优化', sensorNum: 25, uavNum: 2, energyConstraint: 12000, algorithm: '动态规划算法', createdAt: '2026-03-13' },
 ]
