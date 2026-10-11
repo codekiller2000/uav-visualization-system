@@ -1,28 +1,28 @@
 import React, { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { users } from '../data/mockData'
+import api from '../api/client'
 import './Login.css'
 
 function Login({ onLogin }) {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
+  const [loading, setLoading] = useState(false)
   const navigate = useNavigate()
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
     setError('')
-
-    // 验证用户名和密码
-    const user = users.find(u => u.username === username && u.password === password)
-    
-    if (user) {
-      // 登录成功
+    setLoading(true)
+    try {
+      const user = await api.login(username, password)
       localStorage.setItem('currentUser', JSON.stringify(user))
       onLogin()
       navigate('/dashboard')
-    } else {
-      setError('用户名或密码错误')
+    } catch (err) {
+      setError(err.message || '登录失败')
+    } finally {
+      setLoading(false)
     }
   }
 
@@ -59,7 +59,7 @@ function Login({ onLogin }) {
 
           {error && <div className="error-message">{error}</div>}
 
-          <button type="submit" className="btn-primary">登录</button>
+          <button type="submit" className="btn-primary" disabled={loading}>{loading ? '登录中...' : '登录'}</button>
 
           <div className="login-footer">
             <span>还没有账号？</span>

@@ -1,7 +1,7 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import Layout from '../components/Layout'
-import { experiments } from '../data/mockData'
+import api from '../api/client'
 import './ExperimentList.css'
 
 // 弹窗组件
@@ -53,8 +53,20 @@ function ExperimentList({ onLogout }) {
   // 分页
   const [page, setPage] = useState(1)
   const pageSize = 10
-  const totalPages = Math.ceil(experiments.length / pageSize)
-  const pageExperiments = experiments.slice((page - 1) * pageSize, page * pageSize)
+  const [total, setTotal] = useState(0)
+  const [experiments, setExperiments] = useState([])
+  const [loading, setLoading] = useState(true)
+  const totalPages = Math.max(1, Math.ceil(total / pageSize))
+
+  useEffect(() => {
+    setLoading(true)
+    api.getExperiments(page, pageSize)
+      .then(({ list, total }) => {
+        setExperiments(list)
+        setTotal(total)
+      })
+      .finally(() => setLoading(false))
+  }, [page])
 
   return (
     <Layout onLogout={onLogout}>
@@ -76,7 +88,10 @@ function ExperimentList({ onLogout }) {
               </tr>
             </thead>
             <tbody>
-              {pageExperiments.map(exp => (
+              {loading && (
+                <tr><td colSpan={5}>加载中...</td></tr>
+              )}
+              {!loading && experiments.map(exp => (
                 <tr key={exp.id}>
                   <td>{exp.id}</td>
                   <td>{exp.configuration}</td>
@@ -112,7 +127,7 @@ function ExperimentList({ onLogout }) {
 
           {/* 分页 */}
           <div className="pagination">
-            <span className="pagination-info">共 {experiments.length} 条</span>
+            <span className="pagination-info">共 {total} 条</span>
             <span className="pagination-size">{pageSize}条/页</span>
             <button
               className="pagination-btn"

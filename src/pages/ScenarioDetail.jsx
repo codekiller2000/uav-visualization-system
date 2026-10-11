@@ -1,23 +1,35 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import Layout from '../components/Layout'
-import { scenarios } from '../data/mockData'
+import api from '../api/client'
 import './ScenarioDetail.css'
 
 function ScenarioDetail({ onLogout }) {
   const { id } = useParams()
   const navigate = useNavigate()
-  const scenario = scenarios.find(s => s.id === parseInt(id))
-  
-  const [formData, setFormData] = useState(() => {
-    const initialData = {}
-    scenario.parameters.forEach(param => {
-      initialData[param.name] = param.default || (param.type === 'select' ? param.options[0] : '')
-    })
-    return initialData
-  })
-  
+  const [scenario, setScenario] = useState(null)
+  const [formData, setFormData] = useState({})
+  const [loading, setLoading] = useState(true)
   const [submitting, setSubmitting] = useState(false)
+
+  useEffect(() => {
+    api.getScenario(id).then(data => {
+      setScenario(data)
+      const initialData = {}
+      data.parameters.forEach(param => {
+        initialData[param.name] = param.default || (param.type === 'select' ? param.options[0] : '')
+      })
+      setFormData(initialData)
+    }).finally(() => setLoading(false))
+  }, [id])
+
+  if (loading) {
+    return (
+      <Layout onLogout={onLogout}>
+        <div>加载中...</div>
+      </Layout>
+    )
+  }
 
   if (!scenario) {
     return (
@@ -34,16 +46,19 @@ function ScenarioDetail({ onLogout }) {
     }))
   }
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
     setSubmitting(true)
-
-    // 模拟提交实验
-    setTimeout(() => {
+    try {
+      const currentUser = JSON.parse(localStorage.getItem('currentUser') || '{}')
+      await api.submitExperiment(scenario.id, formData, currentUser.id)
       alert('实验提交成功！您可以在"实验结果"页面查看实验状态。')
-      setSubmitting(false)
       navigate('/experiments')
-    }, 1500)
+    } catch (err) {
+      alert('提交失败：' + (err.message || '未知错误'))
+    } finally {
+      setSubmitting(false)
+    }
   }
 
   return (
@@ -63,7 +78,7 @@ function ScenarioDetail({ onLogout }) {
           <div className="info-section">
             <h2>场景描述</h2>
             <p>{scenario.description}</p>
-            
+
             <div className="optimization-goal">
               <h3>优化目标</h3>
               <p>{scenario.optimizationGoal}</p>
@@ -76,7 +91,7 @@ function ScenarioDetail({ onLogout }) {
               {scenario.parameters.map(param => (
                 <div key={param.name} className="form-group">
                   <label>{param.label}</label>
-                  
+
                   {param.type === 'number' && (
                     <input
                       type="number"
@@ -87,7 +102,7 @@ function ScenarioDetail({ onLogout }) {
                       required
                     />
                   )}
-                  
+
                   {param.type === 'select' && (
                     <select
                       value={formData[param.name]}

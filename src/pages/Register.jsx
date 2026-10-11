@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { users } from '../data/mockData'
+import api from '../api/client'
 import './Login.css'
 
 function Register() {
@@ -11,7 +11,7 @@ function Register() {
   const [success, setSuccess] = useState(false)
   const navigate = useNavigate()
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
     setError('')
 
@@ -33,18 +33,15 @@ function Register() {
       return
     }
 
-    // 检查用户名是否已存在
-    const existingUser = users.find(u => u.username === username)
-    if (existingUser) {
-      setError('用户名已存在')
-      return
+    try {
+      await api.register(username, password)
+      setSuccess(true)
+      setTimeout(() => {
+        navigate('/login')
+      }, 2000)
+    } catch (err) {
+      setError(err.message || '注册失败')
     }
-
-    // 注册成功（在实际应用中应该调用API）
-    setSuccess(true)
-    setTimeout(() => {
-      navigate('/login')
-    }, 2000)
   }
 
   return (

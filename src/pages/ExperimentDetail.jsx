@@ -1,14 +1,36 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import Layout from '../components/Layout'
-import { experiments, singleObjectiveResults, paretoSolutions } from '../data/mockData'
+import api from '../api/client'
 import './ExperimentDetail.css'
 
 function ExperimentDetail({ onLogout }) {
   const { id } = useParams()
   const navigate = useNavigate()
-  const experiment = experiments.find(exp => exp.id === parseInt(id))
+  const [experiment, setExperiment] = useState(null)
+  const [singleObjectiveResults, setSingleObjectiveResults] = useState(null)
+  const [paretoData, setParetoData] = useState(null)
+  const [loading, setLoading] = useState(true)
   const [selectedSolution, setSelectedSolution] = useState(null)
+
+  useEffect(() => {
+    api.getExperiment(id)
+      .then(data => {
+        setExperiment(data.experiment)
+        setSingleObjectiveResults(data.singleObjectiveResults)
+        setParetoData(data.paretoSolutions)
+      })
+      .catch(() => setExperiment(null))
+      .finally(() => setLoading(false))
+  }, [id])
+
+  if (loading) {
+    return (
+      <Layout onLogout={onLogout}>
+        <div>加载中...</div>
+      </Layout>
+    )
+  }
 
   if (!experiment) {
     return (
@@ -18,13 +40,8 @@ function ExperimentDetail({ onLogout }) {
     )
   }
 
-  // 判断实验类型
-  const isSingleObjective = singleObjectiveResults[experiment.id] !== undefined
-  const isMultiObjective = paretoSolutions[experiment.id] !== undefined
-
   const renderSingleObjectiveResults = () => {
-    const results = singleObjectiveResults[experiment.id]
-    if (!results) return null
+    if (!singleObjectiveResults) return null
 
     return (
       <div className="results-section">
@@ -41,7 +58,7 @@ function ExperimentDetail({ onLogout }) {
               </tr>
             </thead>
             <tbody>
-              {results.results.map((result, index) => (
+              {singleObjectiveResults.results.map((result, index) => (
                 <tr key={index} className={index === 0 ? 'best-result' : ''}>
                   <td>{result.algorithm}</td>
                   <td>{result.sensorNum}</td>
@@ -61,8 +78,7 @@ function ExperimentDetail({ onLogout }) {
   }
 
   const renderParetoSolutions = () => {
-    const data = paretoSolutions[experiment.id]
-    if (!data) return null
+    if (!paretoData) return null
 
     return (
       <div className="pareto-section">
@@ -84,8 +100,8 @@ function ExperimentDetail({ onLogout }) {
               </tr>
             </thead>
             <tbody>
-              {data.solutions.map((solution) => (
-                <tr 
+              {paretoData.solutions.map((solution) => (
+                <tr
                   key={solution.id}
                   className={selectedSolution?.id === solution.id ? 'selected-row' : ''}
                 >
@@ -98,7 +114,7 @@ function ExperimentDetail({ onLogout }) {
                     </span>
                   </td>
                   <td>
-                    <button 
+                    <button
                       className="btn-select"
                       onClick={() => setSelectedSolution(solution)}
                     >
@@ -114,7 +130,7 @@ function ExperimentDetail({ onLogout }) {
         {selectedSolution && (
           <div className="solution-detail">
             <h3>选中方案详情 - 方案 {selectedSolution.solutionNum}</h3>
-            
+
             <div className="detail-grid">
               <div className="detail-item">
                 <label>策略说明</label>
@@ -196,8 +212,8 @@ function ExperimentDetail({ onLogout }) {
           </div>
         </div>
 
-        {isSingleObjective && renderSingleObjectiveResults()}
-        {isMultiObjective && renderParetoSolutions()}
+        {singleObjectiveResults && renderSingleObjectiveResults()}
+        {paretoData && renderParetoSolutions()}
       </div>
     </Layout>
   )

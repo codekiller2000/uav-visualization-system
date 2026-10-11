@@ -1,11 +1,17 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import Layout from '../components/Layout'
-import { scenarios } from '../data/mockData'
+import api from '../api/client'
 import './ScenarioList.css'
 
 function ScenarioList({ onLogout }) {
   const navigate = useNavigate()
+  const [scenarios, setScenarios] = useState([])
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    api.getScenarios().then(setScenarios).finally(() => setLoading(false))
+  }, [])
 
   return (
     <Layout onLogout={onLogout}>
@@ -14,6 +20,8 @@ function ScenarioList({ onLogout }) {
           <h1>场景配置</h1>
           <p>选择研究场景，配置仿真参数并提交实验</p>
         </div>
+
+        {loading && <p>加载中...</p>}
 
         <div className="scenarios">
           {scenarios.map(scenario => (
@@ -24,17 +32,17 @@ function ScenarioList({ onLogout }) {
                   {scenario.type === 'single-objective' ? '单目标优化' : '多目标优化'}
                 </span>
               </div>
-              
+
               <div className="scenario-content">
                 <p className="scenario-description">{scenario.description}</p>
-                
+
                 <div className="scenario-goal">
                   <strong>优化目标：</strong>
                   <span>{scenario.optimizationGoal}</span>
                 </div>
               </div>
 
-              <button 
+              <button
                 className="btn-configure"
                 onClick={() => navigate(`/scenario/${scenario.id}`)}
               >

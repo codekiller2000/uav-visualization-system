@@ -1,28 +1,21 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import Layout from '../components/Layout'
-import {
-  users,
-  userPermissions,
-  resourceMonitorData,
-  dbExperimentConfigs,
-  experiments,
-} from '../data/mockData'
+import api from '../api/client'
 import './AdminPanel.css'
 
 // ======== 子标签：资源监控 ========
 function ResourceMonitor() {
-  const [data, setData] = useState(resourceMonitorData)
+  const [data, setData] = useState([])
+  const [loading, setLoading] = useState(true)
 
-  const handleRefresh = () => {
-    // 模拟刷新——随机轻微波动
-    setData(prev => prev.map(item => ({
-      ...item,
-      value: item.unit === '%' || item.unit === 'ms'
-        ? +(item.value * (0.92 + Math.random() * 0.16)).toFixed(1)
-        : item.value + Math.floor(Math.random() * 3),
-      updatedAt: new Date().toLocaleString('zh-CN')
-    })))
+  useEffect(() => {
+    api.getResourceMonitor().then(setData).finally(() => setLoading(false))
+  }, [])
+
+  const handleRefresh = async () => {
+    const updated = await api.refreshResourceMonitor()
+    setData(updated)
   }
 
   return (
@@ -32,64 +25,57 @@ function ResourceMonitor() {
         <button className="btn-secondary" onClick={handleRefresh}>↻ 刷新数据</button>
       </div>
       <p className="section-desc">
-        实时展示系统各类资源的当前状态与关键指标（模拟 /monitor/resources 接口数据）。
+        实时展示系统各类资源的当前状态与关键指标（/api/admin/resource-monitor 接口数据）。
       </p>
-      <table className="admin-table">
-        <thead>
-          <tr>
-            <th>#</th>
-            <th>监控指标</th>
-            <th>当前值</th>
-            <th>单位</th>
-            <th>状态</th>
-            <th>更新时间</th>
-          </tr>
-        </thead>
-        <tbody>
-          {data.map(item => (
-            <tr key={item.id}>
-              <td>{item.id}</td>
-              <td>{item.metric}</td>
-              <td><strong>{item.value}</strong></td>
-              <td>{item.unit}</td>
-              <td>
-                <span className="status-dot normal">● 正常</span>
-              </td>
-              <td>{item.updatedAt}</td>
+      {loading ? <p>加载中...</p> : (
+        <table className="admin-table">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>监控指标</th>
+              <th>当前值</th>
+              <th>单位</th>
+              <th>状态</th>
+              <th>更新时间</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {data.map(item => (
+              <tr key={item.id}>
+                <td>{item.id}</td>
+                <td>{item.metric}</td>
+                <td><strong>{item.value}</strong></td>
+                <td>{item.unit}</td>
+                <td>
+                  <span className="status-dot normal">● 正常</span>
+                </td>
+                <td>{item.updatedAt}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      )}
     </div>
   )
 }
 
 // ======== 子标签：权限分配 ========
 function PermissionAssign() {
-  const normalUsers = users.filter(u => u.role !== 'admin')
-  const [perms, setPerms] = useState(
-    normalUsers.map(u => {
-      const p = userPermissions.find(p => p.userId === u.id) || {}
-      return {
-        userId: u.id,
-        username: u.username,
-        canViewResults: p.canViewResults ?? true,
-        canConfigScenario: p.canConfigScenario ?? true,
-        canModifyParams: p.canModifyParams ?? true,
-        canAccessScene1: p.canAccessScene1 ?? true,
-        canAccessScene2: p.canAccessScene2 ?? true,
-        canAccessScene3: p.canAccessScene3 ?? true,
-      }
-    })
-  )
+  const [perms, setPerms] = useState([])
+  const [loading, setLoading] = useState(true)
   const [saved, setSaved] = useState(false)
+
+  useEffect(() => {
+    api.getPermissions().then(setPerms).finally(() => setLoading(false))
+  }, [])
 
   const toggle = (userId, field) => {
     setPerms(prev => prev.map(p => p.userId === userId ? { ...p, [field]: !p[field] } : p))
     setSaved(false)
   }
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
+    await api.savePermissions(perms)
     setSaved(true)
     setTimeout(() => setSaved(false), 2500)
   }
@@ -110,57 +96,68 @@ function PermissionAssign() {
         <button className="btn-primary" onClick={handleSubmit}>提交分配</button>
       </div>
       <p className="section-desc">
-        为普通用户配置可访问模块及操作权限（对应 /permission/assign 接口）。
+        为普通用户配置可访问模块及操作权限（对应 /api/admin/permissions 接口）。
       </p>
       {saved && <div className="alert-success">✓ 权限配置已保存</div>}
-      <div className="perm-table-wrap">
-        <table className="admin-table perm-table">
-          <thead>
-            <tr>
-              <th>用户名</th>
-              {fields.map(f => <th key={f.key}>{f.label}</th>)}
-            </tr>
-          </thead>
-          <tbody>
-            {perms.map(p => (
-              <tr key={p.userId}>
-                <td><strong>{p.username}</strong></td>
-                {fields.map(f => (
-                  <td key={f.key} className="perm-cell">
-                    <label className="toggle-switch">
-                      <input
-                        type="checkbox"
-                        checked={!!p[f.key]}
-                        onChange={() => toggle(p.userId, f.key)}
-                      />
-                      <span className="toggle-slider" />
-                    </label>
-                  </td>
-                ))}
+      {loading ? <p>加载中...</p> : (
+        <div className="perm-table-wrap">
+          <table className="admin-table perm-table">
+            <thead>
+              <tr>
+                <th>用户名</th>
+                {fields.map(f => <th key={f.key}>{f.label}</th>)}
               </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+            </thead>
+            <tbody>
+              {perms.map(p => (
+                <tr key={p.userId}>
+                  <td><strong>{p.username}</strong></td>
+                  {fields.map(f => (
+                    <td key={f.key} className="perm-cell">
+                      <label className="toggle-switch">
+                        <input
+                          type="checkbox"
+                          checked={!!p[f.key]}
+                          onChange={() => toggle(p.userId, f.key)}
+                        />
+                        <span className="toggle-slider" />
+                      </label>
+                    </td>
+                  ))}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
     </div>
   )
 }
 
 // ======== 子标签：数据管理（实验配置表 CRUD）========
 function DataManagement() {
-  const [items, setItems] = useState(dbExperimentConfigs)
+  const [items, setItems] = useState([])
+  const [loading, setLoading] = useState(true)
   const [searchText, setSearchText] = useState('')
   const [showAddModal, setShowAddModal] = useState(false)
   const [editItem, setEditItem] = useState(null)
   const [toast, setToast] = useState('')
+
+  const load = () => {
+    setLoading(true)
+    api.getConfigs().then(setItems).finally(() => setLoading(false))
+  }
+
+  useEffect(() => { load() }, [])
 
   const showToast = (msg) => {
     setToast(msg)
     setTimeout(() => setToast(''), 2500)
   }
 
-  const handleDelete = (id) => {
+  const handleDelete = async (id) => {
     if (!window.confirm('确定删除该条记录？')) return
+    await api.deleteConfig(id)
     setItems(prev => prev.filter(i => i.id !== id))
     showToast('✓ 删除成功')
   }
@@ -169,12 +166,14 @@ function DataManagement() {
     i.scenarioName.includes(searchText) || i.algorithm.includes(searchText) || String(i.id).includes(searchText)
   )
 
-  const handleSave = (data) => {
+  const handleSave = async (data) => {
     if (data.id) {
+      await api.updateConfig(data.id, data)
       setItems(prev => prev.map(i => i.id === data.id ? data : i))
       showToast('✓ 修改成功')
     } else {
-      const newItem = { ...data, id: items.length + 1, createdAt: new Date().toISOString().slice(0, 10) }
+      const { id } = await api.addConfig(data)
+      const newItem = { ...data, id, createdAt: new Date().toISOString().slice(0, 10) }
       setItems(prev => [...prev, newItem])
       showToast('✓ 新增成功')
     }
@@ -197,43 +196,45 @@ function DataManagement() {
         </div>
       </div>
       <p className="section-desc">
-        实验配置表的增删改查操作（对应 /resource/query、/resource/add、/resource/update、/resource/delete 接口）。
+        实验配置表的增删改查操作（对应 /api/admin/configs 接口）。
       </p>
       {toast && <div className="alert-success">{toast}</div>}
 
-      <table className="admin-table">
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>场景名称</th>
-            <th>传感器数</th>
-            <th>无人机数</th>
-            <th>能量约束(J)</th>
-            <th>算法</th>
-            <th>创建日期</th>
-            <th>操作</th>
-          </tr>
-        </thead>
-        <tbody>
-          {filteredItems.map(item => (
-            <tr key={item.id}>
-              <td>{item.id}</td>
-              <td>{item.scenarioName}</td>
-              <td>{item.sensorNum}</td>
-              <td>{item.uavNum}</td>
-              <td>{item.energyConstraint}</td>
-              <td>{item.algorithm}</td>
-              <td>{item.createdAt}</td>
-              <td>
-                <button className="btn-edit" onClick={() => { setEditItem(item); setShowAddModal(true) }}>编辑</button>
-                <button className="btn-delete" onClick={() => handleDelete(item.id)}>删除</button>
-              </td>
+      {loading ? <p>加载中...</p> : (
+        <table className="admin-table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>场景名称</th>
+              <th>传感器数</th>
+              <th>无人机数</th>
+              <th>能量约束(J)</th>
+              <th>算法</th>
+              <th>创建日期</th>
+              <th>操作</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {filteredItems.map(item => (
+              <tr key={item.id}>
+                <td>{item.id}</td>
+                <td>{item.scenarioName}</td>
+                <td>{item.sensorNum}</td>
+                <td>{item.uavNum}</td>
+                <td>{item.energyConstraint}</td>
+                <td>{item.algorithm}</td>
+                <td>{item.createdAt}</td>
+                <td>
+                  <button className="btn-edit" onClick={() => { setEditItem(item); setShowAddModal(true) }}>编辑</button>
+                  <button className="btn-delete" onClick={() => handleDelete(item.id)}>删除</button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      )}
 
-      {filteredItems.length === 0 && (
+      {!loading && filteredItems.length === 0 && (
         <div className="empty-hint">暂无匹配数据</div>
       )}
 
@@ -302,27 +303,29 @@ function ConfigFormModal({ item, onSave, onClose }) {
 
 // ======== 子标签：用户管理 ========
 function UserManagement() {
-  const [userList, setUserList] = useState(users.map(u => ({ ...u })))
+  const [userList, setUserList] = useState([])
+  const [loading, setLoading] = useState(true)
   const [toast, setToast] = useState('')
+
+  useEffect(() => {
+    api.getUsers().then(setUserList).finally(() => setLoading(false))
+  }, [])
 
   const showToast = (msg) => {
     setToast(msg)
     setTimeout(() => setToast(''), 2000)
   }
 
-  const toggleStatus = (id) => {
-    setUserList(prev => prev.map(u => {
-      if (u.id === id && u.role !== 'admin') {
-        const next = u.status === 'active' ? 'disabled' : 'active'
-        showToast(`✓ 用户 ${u.username} 已${next === 'active' ? '启用' : '禁用'}`)
-        return { ...u, status: next }
-      }
-      return u
-    }))
+  const toggleStatus = async (u) => {
+    if (u.role === 'admin') return
+    const { status } = await api.toggleUserStatus(u.id)
+    setUserList(prev => prev.map(x => x.id === u.id ? { ...x, status } : x))
+    showToast(`✓ 用户 ${u.username} 已${status === 'active' ? '启用' : '禁用'}`)
   }
 
-  const handleResetPwd = (u) => {
+  const handleResetPwd = async (u) => {
     if (u.role === 'admin') return
+    await api.resetUserPassword(u.id)
     showToast(`✓ 用户 ${u.username} 密码已重置为 reset123`)
   }
 
@@ -334,51 +337,53 @@ function UserManagement() {
       <p className="section-desc">查看系统所有用户账号，可对违规账号禁用或重置密码。</p>
       {toast && <div className="alert-success">{toast}</div>}
 
-      <table className="admin-table">
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>用户名</th>
-            <th>角色</th>
-            <th>状态</th>
-            <th>创建日期</th>
-            <th>操作</th>
-          </tr>
-        </thead>
-        <tbody>
-          {userList.map(u => (
-            <tr key={u.id}>
-              <td>{u.id}</td>
-              <td>{u.username}</td>
-              <td>
-                <span className={`role-badge ${u.role}`}>
-                  {u.role === 'admin' ? '管理员' : '普通用户'}
-                </span>
-              </td>
-              <td>
-                <span className={`status-dot ${u.status}`}>
-                  {u.status === 'active' ? '● 正常' : '● 禁用'}
-                </span>
-              </td>
-              <td>{u.createdAt}</td>
-              <td>
-                {u.role !== 'admin' && (
-                  <>
-                    <button
-                      className={u.status === 'active' ? 'btn-delete' : 'btn-edit'}
-                      onClick={() => toggleStatus(u.id)}
-                    >
-                      {u.status === 'active' ? '禁用' : '启用'}
-                    </button>
-                    <button className="btn-secondary-sm" onClick={() => handleResetPwd(u)}>重置密码</button>
-                  </>
-                )}
-                {u.role === 'admin' && <span className="text-muted">—</span>}
-              </td>
+      {loading ? <p>加载中...</p> : (
+        <table className="admin-table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>用户名</th>
+              <th>角色</th>
+              <th>状态</th>
+              <th>创建日期</th>
+              <th>操作</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {userList.map(u => (
+              <tr key={u.id}>
+                <td>{u.id}</td>
+                <td>{u.username}</td>
+                <td>
+                  <span className={`role-badge ${u.role}`}>
+                    {u.role === 'admin' ? '管理员' : '普通用户'}
+                  </span>
+                </td>
+                <td>
+                  <span className={`status-dot ${u.status}`}>
+                    {u.status === 'active' ? '● 正常' : '● 禁用'}
+                  </span>
+                </td>
+                <td>{u.createdAt}</td>
+                <td>
+                  {u.role !== 'admin' && (
+                    <>
+                      <button
+                        className={u.status === 'active' ? 'btn-delete' : 'btn-edit'}
+                        onClick={() => toggleStatus(u)}
+                      >
+                        {u.status === 'active' ? '禁用' : '启用'}
+                      </button>
+                      <button className="btn-secondary-sm" onClick={() => handleResetPwd(u)}>重置密码</button>
+                    </>
+                  )}
+                  {u.role === 'admin' && <span className="text-muted">—</span>}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      )}
     </div>
   )
 }

@@ -1,0 +1,15 @@
+{
+  "version": 5,
+  "source": "codeflicker",
+  "projectPath": "/Users/zhengjingyu/personalProject/uav-visualization-system",
+  "migratedAt": "2026-10-11T13:38:39.646Z",
+  "result": {
+    "moved": false,
+    "merged": false,
+    "conflicts": 0,
+    "rulesCopied": 0,
+    "rulesSkipped": 0,
+    "commandSkillsCreated": 0,
+    "commandSkillsSkipped": 0
+  }
+}
